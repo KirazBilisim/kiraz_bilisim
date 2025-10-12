@@ -68,7 +68,7 @@ export default function Hero() {
               <div className="text-sm text-gray-600">Mutlu Müşteri</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-rose-600 mb-2">2+</div>
+              <div className="text-3xl sm:text-4xl font-bold text-rose-600 mb-2">1+</div>
               <div className="text-sm text-gray-600">Yıllık Tecrübe</div>
             </div>
             <div className="text-center">
