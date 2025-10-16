@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Navbar from '@/components/Header';
 import Footer from '@/components/Footer';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={inter.className}>
-        <Navbar />          {/* Navbar tüm sayfalarda gözükecek */}
-        <main>{children}</main> {/* Dinamik sayfalar burada render edilecek */}
-        <Footer />          {/* Footer tüm sayfalarda gözükecek */}
+        <AuthProvider>
+          <Navbar />          {/* Navbar tüm sayfalarda gözükecek */}
+          <main>{children}</main> {/* Dinamik sayfalar burada render edilecek */}
+          <Footer />          {/* Footer tüm sayfalarda gözükecek */}
+        </AuthProvider>
       </body>
     </html>
   );

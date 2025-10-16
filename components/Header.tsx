@@ -2,27 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<string | null>(null); // login durumu
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
-
-    // localStorage'dan kullanıcı al
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) setUser(savedUser);
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -36,10 +41,9 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    window.location.href = '/';
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
   };
 
   return (
@@ -90,11 +94,31 @@ export default function Header() {
 
             {/* Sağ üst Kayıt/Giriş veya Hesabım */}
             <div className="flex items-center space-x-2 ml-auto">
-              {user ? (
-                <>
-                  <span>Hesabım: {user}</span>
-                  <Button onClick={handleLogout} variant="outline">Çıkış Yap</Button>
-                </>
+              {loading ? (
+                <div className="w-20 h-8 bg-gray-200 animate-pulse rounded"></div>
+              ) : user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span className="hidden sm:inline">{user.name}</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => router.push('/profile')}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Profil Ayarları</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Çıkış Yap</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <>
                   <Link href="/register">
@@ -139,10 +163,26 @@ export default function Header() {
             </Button>
 
             {/* Mobil Kayıt/Giriş veya Hesabım */}
-            {user ? (
+            {loading ? (
+              <div className="w-full h-8 bg-gray-200 animate-pulse rounded"></div>
+            ) : user ? (
               <>
-                <span className="block text-gray-700">Hesabım: {user}</span>
-                <Button onClick={handleLogout} variant="outline" className="w-full">Çıkış Yap</Button>
+                <span className="block text-gray-700 font-medium">Merhaba, {user.name}</span>
+                <Button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    router.push('/profile');
+                  }} 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <Settings className="mr-2 h-4 w-4" />
+                  Profil Ayarları
+                </Button>
+                <Button onClick={handleLogout} variant="outline" className="w-full">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Çıkış Yap
+                </Button>
               </>
             ) : (
               <>
