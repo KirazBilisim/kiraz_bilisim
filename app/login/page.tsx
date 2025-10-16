@@ -39,7 +39,7 @@ export default function LoginPage() {
           email: formData.email,
           password: formData.password,
         }),
-        credentials: "include", // cookie varsa
+         credentials: "include"
       });
 
       if (!res.ok) {
