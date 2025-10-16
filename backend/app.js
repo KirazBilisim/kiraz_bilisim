@@ -6,14 +6,17 @@ const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
+//"http://localhost:3001"
 app.use(
   cors({
-    origin: ["http://localhost:3001", "https://kirazbilisim.vercel.app/"],
+    origin: ["https://kirazbilisim.vercel.app/"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
 
 app.use(cookieParser());
 app.use(express.json());
