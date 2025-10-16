@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { UserService } from "@/lib/database/userService";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
