@@ -3,23 +3,21 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
 
 export default function RegisterPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "",surname:"", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  
-  const { register, user } = useAuth();
+  const [user, setUser] = useState<any>(null); // local user state
   const router = useRouter();
 
   // Eğer kullanıcı zaten giriş yapmışsa ana sayfaya yönlendir
   if (user) {
-    router.push('/');
+    router.push("/");
     return null;
   }
 
@@ -35,14 +33,32 @@ export default function RegisterPage() {
     setSuccess(false);
 
     try {
-      await register(formData.name, formData.email, formData.password);
+      console.log(formData)
+      const res = await fetch("http://localhost:3000/api/v1/users/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          surname:formData.surname,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        console.log(data)
+        throw new Error(data.message || "Kayıt sırasında bir hata oluştu");
+        console.log
+      }
+
       setSuccess(true);
       // 2 saniye sonra login sayfasına yönlendir
       setTimeout(() => {
-        router.push('/login');
+        router.push("/login");
       }, 2000);
-    } catch (error: any) {
-      setError(error.message || "Kayıt sırasında bir hata oluştu");
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -67,19 +83,19 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Kayıt Ol</h1>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               type="text"
               name="name"
-              placeholder="Ad Soyad"
+              placeholder="Ad"
               value={formData.name}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-600"
@@ -87,7 +103,20 @@ export default function RegisterPage() {
               disabled={loading}
             />
           </div>
-          
+
+            <div>
+            <input
+              type="text"
+              name="surname"
+              placeholder="Soyad"
+              value={formData.surname}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-600"
+              required
+              disabled={loading}
+            />
+          </div>
+
           <div>
             <input
               type="email"
@@ -100,7 +129,7 @@ export default function RegisterPage() {
               disabled={loading}
             />
           </div>
-          
+
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -121,9 +150,9 @@ export default function RegisterPage() {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          
-          <Button 
-            type="submit" 
+
+          <Button
+            type="submit"
             className="w-full bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800"
             disabled={loading}
           >
@@ -137,7 +166,7 @@ export default function RegisterPage() {
             )}
           </Button>
         </form>
-        
+
         <p className="mt-4 text-center text-gray-600">
           Zaten hesabın var mı?{" "}
           <Link href="/login" className="text-rose-600 font-medium hover:underline">
