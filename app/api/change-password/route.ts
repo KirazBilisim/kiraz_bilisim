@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { UserService } from "@/lib/database/userService";
 import { verifyToken, validatePassword } from "@/lib/auth";
 import { cookies } from "next/headers";
-
+export const dynamic = "force-dynamic"
 export async function POST(req: Request) {
   try {
     const cookieStore = await cookies();
