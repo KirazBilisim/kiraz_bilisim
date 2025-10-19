@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Menu, X, User, Settings, LogOut, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Menu, X, User, Settings, LogOut, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,14 +28,14 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollOrNavigate = (id: string) => {
-    if (pathname === '/') {
+    if (pathname === "/") {
       const element = document.getElementById(id);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      if (element) element.scrollIntoView({ behavior: "smooth" });
     } else {
       window.location.href = `/#${id}`;
     }
@@ -43,13 +44,15 @@ export default function Header() {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/');
+    router.push("/");
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-transparent'
+      className={`fixed dark:bg-black top-0 left-0 right-0 z-50  transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/95 dark:bg-black backdrop-blur-md shadow-md"
+          : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,20 +77,35 @@ export default function Header() {
 
           {/* Desktop Menü */}
           <div className="hidden md:flex items-center w-full">
-            <nav className="flex items-center justify-center flex-1 space-x-8">
-              <button onClick={() => scrollOrNavigate('services')} className="text-gray-700 hover:text-rose-600 transition-colors font-medium">
+            <nav className="flex items-center justify-center  flex-1 space-x-8">
+              <button
+                onClick={() => scrollOrNavigate("services")}
+                className="text-gray-700 dark:text-white hover:text-rose-600 transition-colors font-medium"
+              >
                 Hizmetler
               </button>
-              <button onClick={() => scrollOrNavigate('about')} className="text-gray-700 hover:text-rose-600 transition-colors font-medium">
+              <button
+                onClick={() => scrollOrNavigate("about")}
+                className="text-gray-700 dark:text-white hover:text-rose-600 transition-colors font-medium"
+              >
                 Hakkımızda
               </button>
-              <button onClick={() => scrollOrNavigate('process')} className="text-gray-700 hover:text-rose-600 transition-colors font-medium">
+              <button
+                onClick={() => scrollOrNavigate("process")}
+                className="text-gray-700 dark:text-white hover:text-rose-600 transition-colors font-medium"
+              >
                 Süreç
               </button>
-              <button onClick={() => scrollOrNavigate('contact')} className="text-gray-700 hover:text-rose-600 transition-colors font-medium">
+              <button
+                onClick={() => scrollOrNavigate("contact")}
+                className="text-gray-700 dark:text-white hover:text-rose-600 transition-colors font-medium"
+              >
                 İletişim
               </button>
-              <Button onClick={() => scrollOrNavigate('contact')} className="bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800">
+              <Button
+                onClick={() => scrollOrNavigate("contact")}
+                className="bg-gradient-to-r dark:text-white from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800"
+              >
                 Teklif Al
               </Button>
             </nav>
@@ -99,7 +117,10 @@ export default function Header() {
               ) : user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
                       <User className="h-4 w-4" />
                       <span className="hidden sm:inline">{user.name}</span>
                       <ChevronDown className="h-4 w-4" />
@@ -108,7 +129,7 @@ export default function Header() {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => router.push('/profile')}>
+                    <DropdownMenuItem onClick={() => router.push("/profile")}>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Profil Ayarları</span>
                     </DropdownMenuItem>
@@ -125,8 +146,12 @@ export default function Header() {
                     <Button variant="outline">Kayıt Ol</Button>
                   </Link>
                   <Link href="/login">
-                    <Button variant="default">Giriş Yap</Button>
+                    <Button className="bg-red-600" variant="default">
+                      Giriş Yap
+                    </Button>
                   </Link>
+
+                  <ThemeToggle />
                 </>
               )}
             </div>
@@ -137,7 +162,11 @@ export default function Header() {
             className="md:hidden text-gray-700"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -146,19 +175,34 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t shadow-lg">
           <nav className="container mx-auto px-4 py-4 flex flex-col space-y-2">
-            <button onClick={() => scrollOrNavigate('services')} className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium">
+            <button
+              onClick={() => scrollOrNavigate("services")}
+              className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium"
+            >
               Hizmetler
             </button>
-            <button onClick={() => scrollOrNavigate('about')} className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium">
+            <button
+              onClick={() => scrollOrNavigate("about")}
+              className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium"
+            >
               Hakkımızda
             </button>
-            <button onClick={() => scrollOrNavigate('process')} className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium">
+            <button
+              onClick={() => scrollOrNavigate("process")}
+              className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium"
+            >
               Süreç
             </button>
-            <button onClick={() => scrollOrNavigate('contact')} className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium">
+            <button
+              onClick={() => scrollOrNavigate("contact")}
+              className="text-left text-gray-700 hover:text-rose-600 transition-colors font-medium"
+            >
               İletişim
             </button>
-            <Button onClick={() => scrollOrNavigate('contact')} className="bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 w-full">
+            <Button
+              onClick={() => scrollOrNavigate("contact")}
+              className="bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 w-full"
+            >
               Teklif Al
             </Button>
 
@@ -167,19 +211,25 @@ export default function Header() {
               <div className="w-full h-8 bg-gray-200 animate-pulse rounded"></div>
             ) : user ? (
               <>
-                <span className="block text-gray-700 font-medium">Merhaba, {user.name}</span>
-                <Button 
+                <span className="block text-gray-700 font-medium">
+                  Merhaba, {user.name}
+                </span>
+                <Button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    router.push('/profile');
-                  }} 
-                  variant="outline" 
+                    router.push("/profile");
+                  }}
+                  variant="outline"
                   className="w-full"
                 >
                   <Settings className="mr-2 h-4 w-4" />
                   Profil Ayarları
                 </Button>
-                <Button onClick={handleLogout} variant="outline" className="w-full">
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="w-full"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Çıkış Yap
                 </Button>
@@ -187,13 +237,18 @@ export default function Header() {
             ) : (
               <>
                 <Link href="/register">
-                  <Button variant="outline" className="w-full">Kayıt Ol</Button>
+                  <Button variant="outline" className="w-full">
+                    Kayıt Ol
+                  </Button>
                 </Link>
                 <Link href="/login">
-                  <Button variant="default" className="w-full">Giriş Yap</Button>
+                  <Button variant="default" className="w-full">
+                    Giriş Yap
+                  </Button>
                 </Link>
               </>
             )}
+            <ThemeToggle />
           </nav>
         </div>
       )}

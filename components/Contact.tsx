@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -21,34 +21,47 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
       title: "Mesajınız Gönderildi!",
       description: "En kısa sürede size geri dönüş yapacağız.",
     });
 
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setFormData({ name: "", email: "", phone: "", message: "" });
     setIsSubmitting(false);
   };
 
   return (
-    <section id="contact" className="py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-rose-50">
+    <section
+      id="contact"
+      className="py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-rose-50 dark:from-black dark:to-[#191818]"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Hemen <span className="bg-gradient-to-r from-rose-600 to-rose-800 bg-clip-text text-transparent">İletişime Geçin</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold dark:text-white text-gray-900 mb-4">
+            Hemen{" "}
+            <span className="bg-gradient-to-r from-rose-600 to-rose-800 bg-clip-text text-transparent">
+              İletişime Geçin
+            </span>
           </h2>
           <p className="text-lg text-gray-600">
-            Projeniz hakkında konuşmak için bize ulaşın. Size en kısa sürede geri dönüş yapalım.
+            Projeniz hakkında konuşmak için bize ulaşın. Size en kısa sürede
+            geri dönüş yapalım.
           </p>
         </div>
 
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
           <div>
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white dark:bg-[#191818] rounded-2xl shadow-xl p-8 space-y-6"
+            >
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium dark:text-white text-gray-700 mb-2"
+                >
                   Adınız Soyadınız
                 </label>
                 <Input
@@ -56,14 +69,19 @@ export default function Contact() {
                   type="text"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Lütfen adınızı ve soyadınızı girin."
-                  className="w-full"
+                  className="w-full dark:bg-[#191818] dark:text-white"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium dark:text-white text-gray-700 mb-2"
+                >
                   E-posta Adresiniz
                 </label>
                 <Input
@@ -71,38 +89,50 @@ export default function Contact() {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="ornek@email.com"
-                  className="w-full"
+                  className="w-full dark:bg-[#191818] dark:text-white"
                 />
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium dark:text-white text-gray-700 mb-2"
+                >
                   Telefon Numaranız
                 </label>
                 <Input
                   id="phone"
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
                   placeholder="+90 (5XX) XXX XX XX"
-                  className="w-full"
+                  className="w-full dark:bg-[#191818] dark:text-white"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium dark:text-white text-gray-700 mb-2"
+                >
                   Mesajınız
                 </label>
                 <Textarea
                   id="message"
                   required
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   placeholder="Projeniz hakkında detaylı bilgi verin..."
                   rows={5}
-                  className="w-full"
+                  className="w-full dark:bg-[#191818] dark:text-white"
                 />
               </div>
 
@@ -111,15 +141,17 @@ export default function Contact() {
                 disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white py-6 text-lg group"
               >
-                {isSubmitting ? 'Gönderiliyor...' : 'Mesaj Gönder'}
+                {isSubmitting ? "Gönderiliyor..." : "Mesaj Gönder"}
                 <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </form>
           </div>
 
           <div className="space-y-8">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">İletişim Bilgileri</h3>
+            <div className="bg-white dark:bg-[#191818] rounded-2xl shadow-xl p-8">
+              <h3 className="text-2xl font-bold dark:text-white text-gray-900 mb-6">
+                İletişim Bilgileri
+              </h3>
 
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -129,8 +161,13 @@ export default function Contact() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">E-posta</h4>
-                    <a href="mailto:info@kirazbilisim.com" className="text-gray-600 hover:text-rose-600 transition-colors">
+                    <h4 className="font-semibold dark:text-white text-gray-900 mb-1">
+                      E-posta
+                    </h4>
+                    <a
+                      href="mailto:info@kirazbilisim.com"
+                      className="text-gray-600  hover:text-rose-600 transition-colors"
+                    >
                       info@kirazbilisim.com
                     </a>
                   </div>
@@ -143,8 +180,13 @@ export default function Contact() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Telefon</h4>
-                    <a href="/" className="text-gray-600 hover:text-rose-600 transition-colors">
+                    <h4 className="font-semibold dark:text-white text-gray-900 mb-1">
+                      Telefon
+                    </h4>
+                    <a
+                      href="/"
+                      className="text-gray-600 hover:text-rose-600 transition-colors"
+                    >
                       Eklenecek
                     </a>
                   </div>
@@ -157,9 +199,12 @@ export default function Contact() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Adres</h4>
+                    <h4 className="font-semibold dark:text-white text-gray-900 mb-1">
+                      Adres
+                    </h4>
                     <p className="text-gray-600">
-                      Yakında fiziksel ofisimiz açılacaktır. Şimdilik online olarak hizmet vermekteyiz.
+                      Yakında fiziksel ofisimiz açılacaktır. Şimdilik online
+                      olarak hizmet vermekteyiz.
                     </p>
                   </div>
                 </div>
@@ -179,7 +224,9 @@ export default function Contact() {
                 </div>
                 <div className="flex justify-between">
                   <span>Pazar</span>
-                  <span className="font-semibold">Yalnızca bugfix ve teknik destek</span>
+                  <span className="font-semibold">
+                    Yalnızca bugfix ve teknik destek
+                  </span>
                 </div>
               </div>
             </div>
