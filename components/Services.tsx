@@ -2,6 +2,7 @@ import { Code, Smartphone, Cloud, LineChart, Zap, Gamepad } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { createSlug } from '@/app/utils/slug';
+import { packages } from '@/lib/data/packages';
 
 const services = [
   {
@@ -30,13 +31,13 @@ const services = [
   },
   {
     icon: Gamepad,
-    title: 'Oyun Eklentasyonları',
+    title: 'Oyun Eklentileri',
     description: 'Oyunlarınız için özel eklentiler ve modüller geliştiriyoruz.',
     features: ['Oyun Motoru Entegrasyonu', 'Özel Modüller', 'Çoklu Platform Desteği', 'Performans Optimizasyonu', 'Kullanıcı Deneyimi (UX) Tasarımı', 'Bakım ve Güncellemeler']
   },
   {
     icon: Zap,
-    title: 'API & Entegrasyon',
+    title: 'API Entegrasyon',
     description: 'Sistemlerinizi birbirine bağlayarak sorunsuz veri akışı ve otomasyon sağlıyoruz.',
     features: ['REST API', 'Mikroservis', 'Sistem Entegrasyonu', 'Veri Senkronizasyonu', 'Gerçek Zamanlı Veri İşleme', 'API Güvenliği', 'Dokümantasyon ve Eğitim', 'Bakım ve Destek']
   }
@@ -59,6 +60,7 @@ export default function Services() {
           {services.map((service, index) => {
             const Icon = service.icon;
             const slug = createSlug(service.title);
+            const hasPackages = packages[slug] !== undefined;
 
             return (
               <Card
@@ -84,8 +86,8 @@ export default function Services() {
 
                   <div className="mt-4">
                     <Link href={`/services/${slug}`}>
-                      <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400">
-                        Paketleri İncele
+                      <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400 transition-colors duration-300">
+                        {hasPackages ? "Paketleri İncele" : "Detayları Gör"}
                       </button>
                     </Link>
                   </div>
